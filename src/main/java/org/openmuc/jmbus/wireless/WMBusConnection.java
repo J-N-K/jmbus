@@ -8,13 +8,11 @@ package org.openmuc.jmbus.wireless;
 import java.io.IOException;
 import java.text.MessageFormat;
 
+import gnu.io.SerialPort;
 import org.openmuc.jmbus.SecondaryAddress;
 import org.openmuc.jmbus.transportlayer.SerialBuilder;
 import org.openmuc.jmbus.transportlayer.TcpBuilder;
 import org.openmuc.jmbus.transportlayer.TransportLayer;
-import org.openmuc.jrxtx.DataBits;
-import org.openmuc.jrxtx.Parity;
-import org.openmuc.jrxtx.StopBits;
 
 /**
  * A Wireless Mbus Connection.
@@ -74,7 +72,7 @@ public interface WMBusConnection extends AutoCloseable {
                 // should not occur
                 throw new RuntimeException(MessageFormat.format("Error unknown manufacturer {0}.", wmBusManufacturer));
             }
-            setStopBits(StopBits.STOPBITS_1).setParity(Parity.NONE).setDataBits(DataBits.DATABITS_8);
+            setStopBits(SerialPort.STOPBITS_1).setParity(SerialPort.PARITY_NONE).setDataBits(SerialPort.DATABITS_8);
         }
 
         public WMBusSerialBuilder setMode(WMBusMode mode) {

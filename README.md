@@ -86,16 +86,6 @@ This way the connection passes received messages to the application.
 
 Before accessing elements of a variable data structure it has to be decoded using the decode method.
 
-## Dependencies
-
-jMBus depends on the Java library jRxTx. jRxTx is a fork of RxTx and is
-hosted at <https://github.com/openmuc/jrxtx>. The library is licensed
-under the LGPL(v2.1 or later) + linking exception.
-
-Note that you have to install the native part of RxTx as explained in
-our
-[FAQ](https://www.openmuc.org/faq/how-do-i-get-serial-communication-to-work-with-rxtx/).
-
 # How M-Bus Works
 
 This chapter gives a short introduction into the M-Bus protocol.

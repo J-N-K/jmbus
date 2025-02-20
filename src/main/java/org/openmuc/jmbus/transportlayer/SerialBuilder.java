@@ -5,10 +5,7 @@
  */
 package org.openmuc.jmbus.transportlayer;
 
-import org.openmuc.jrxtx.DataBits;
-import org.openmuc.jrxtx.Parity;
-import org.openmuc.jrxtx.SerialPortBuilder;
-import org.openmuc.jrxtx.StopBits;
+import gnu.io.SerialPort;
 
 /**
  * Connection builder for serial connections.
@@ -18,9 +15,9 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
     private String serialPortName;
     private int baudrate;
 
-    private DataBits dataBits;
-    private StopBits stopBits;
-    private Parity parity;
+    private int dataBits;
+    private int stopBits;
+    private int parity;
 
     /**
      * Constructor of the Serial Settings Builder, for connecting M-Bus devices over serial connections like RS232 and
@@ -33,9 +30,29 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
         this.serialPortName = serialPortName;
 
         this.baudrate = 2400;
-        this.dataBits = DataBits.DATABITS_8;
-        this.stopBits = StopBits.STOPBITS_1;
-        this.parity = Parity.EVEN;
+        this.dataBits = SerialPort.DATABITS_8;
+        this.stopBits = SerialPort.STOPBITS_1;
+        this.parity = SerialPort.PARITY_EVEN;
+    }
+
+    public String getSerialPortName() {
+        return serialPortName;
+    }
+
+    public int getBaudrate() {
+        return baudrate;
+    }
+
+    public int getDataBits() {
+        return dataBits;
+    }
+
+    public int getStopBits() {
+        return stopBits;
+    }
+
+    public int getParity() {
+        return parity;
     }
 
     /**
@@ -64,13 +81,13 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
     }
 
     /**
-     * Sets the number of DataBits, default is {@link DataBits#DATABITS_8}.
+     * Sets the number of DataBits, default is {@link SerialPort#DATABITS_8}.
      * 
      * @param dataBits
      *            the new number of databits.
      * @return the builder itself.
      */
-    public S setDataBits(DataBits dataBits) {
+    public S setDataBits(int dataBits) {
         this.dataBits = dataBits;
         return self();
     }
@@ -82,7 +99,7 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
      *            Possible values are 1, 1.5 or 2
      * @return the builder itself
      */
-    public S setStopBits(StopBits stopBits) {
+    public S setStopBits(int stopBits) {
         this.stopBits = stopBits;
         return self();
     }
@@ -94,21 +111,14 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
      *            Possible values are NONE, EVEN, ODD, SPACE or MARK.
      * @return the builder itself
      */
-    public S setParity(Parity parity) {
+    public S setParity(int parity) {
         this.parity = parity;
         return self();
     }
 
     @Override
     protected TransportLayer buildTransportLayer() {
-        SerialPortBuilder serialPortBuilder = SerialPortBuilder.newBuilder(serialPortName)
-                .setBaudRate(baudrate)
-                .setDataBits(dataBits)
-                .setStopBits(stopBits)
-                .setStopBits(stopBits)
-                .setParity(parity);
-
-        return new SerialLayer(getTimeout(), serialPortBuilder);
+        return new SerialLayer(getTimeout(), (SerialBuilder<?, ?>) this);
     }
 
 }

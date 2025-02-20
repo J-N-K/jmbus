@@ -24,15 +24,15 @@ public class MBusTestTCPConnectionBuilder extends MBusTcpBuilder {
             @Override
             public void run() {
                 while (true) {
-                    // check if a short request message has been sent
-                    if (os.size() == 5) {
-                        synchronized (is) {
+                    synchronized (is) {
+                        // check if a short request message has been sent
+                        if (os.size() == 5) {
                             // simulate a correct response message
                             is.reset();
                             is.notifyAll();
                         }
-                        break;
                     }
+                    break;
                 }
             }
         }).start();

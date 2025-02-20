@@ -1,5 +1,0 @@
-eclipse.project.name = 'jmbus-cli-app'
-
-dependencies {
-    compile project(':')
-}

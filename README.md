@@ -60,8 +60,6 @@ byte[] data = { 0x01, 0x7a, 0x09 };
 mBusConnection.write(primaryAddress, data);
 ```
 
-Try the CLI APP described in [Command Line Application](#cli_app).
-
 ## Wireless M-Bus
 
 First a wireless connection needs to be established.
@@ -84,39 +82,9 @@ try (WMBusConnection wmBusConnection = builder.build()) {
 The listener passed to the wireless M-Bus builder has to implement the callback method `newMessage(WMBusMessage)`.
 This way the connection passes received messages to the application.
 
-Try the CLI APP described in [Command Line Application](#cli_app).
-
 ## Variable Data Structure
 
 Before accessing elements of a variable data structure it has to be decoded using the decode method.
-
-## Command Line Application
-
-The library is distributed with a demo CLI application. You can run the
-CLI APP using the script found in the folder `/run-scripts`. The file
-ending with `.sh` is a shell script for Unix/Linux/Mac. The file ending
-with `.bat.winfile` is a batch file for use with Windows.
-
-In order to run the script in Windows you have to rename the batch file
-by removing the ".winfile" ending so that it simply end with ".bat".
-
-The **jmbusApp** can be used to:
-
--   read a specific device over wired M-Bus
-
--   write data to a specific device over wired M-Bus
-
--   scan for connected wired M-Bus devices
-
--   listens for incoming wireless M-Bus messages and prints them to the
-    screen
-
-Executing the script without any parameters will print help information
-to the screen.
-
-Instead of running the application from the terminal you can create
-Eclipse project files as explained here: <https://www.openmuc.org/faq/>
-and run them from within Eclipse.
 
 ## Dependencies
 

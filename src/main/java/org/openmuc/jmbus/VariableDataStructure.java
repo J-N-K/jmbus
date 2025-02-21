@@ -19,12 +19,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Representation of the data transmitted in RESP-UD (M-Bus) and SND-NR (wM-Bus) messages.
- * 
+ *
  * @see #decode()
  */
 public class VariableDataStructure {
 
-    private static final ConcurrentHashMap<SecondaryAddress, List<DataRecord>> deviceHistory = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<SecondaryAddress, List<DataRecord>> deviceHistory =
+            new ConcurrentHashMap<>();
 
     private final byte[] buffer;
     private final int offset;
@@ -54,7 +55,11 @@ public class VariableDataStructure {
 
     private int ciField;
 
-    public VariableDataStructure(byte[] buffer, int offset, int length, SecondaryAddress linkLayerSecondaryAddress,
+    public VariableDataStructure(
+            byte[] buffer,
+            int offset,
+            int length,
+            SecondaryAddress linkLayerSecondaryAddress,
             Map<SecondaryAddress, byte[]> keyMap) {
         this.buffer = buffer;
         this.offset = offset;
@@ -66,7 +71,7 @@ public class VariableDataStructure {
 
     /**
      * This method is used to
-     * 
+     *
      * @throws DecodingException
      */
     public void decode() throws DecodingException {
@@ -75,45 +80,44 @@ public class VariableDataStructure {
                 ciField = readUnsignedByte(buffer, offset);
 
                 switch (ciField) {
-                case 0x72:
-                    decodeLongHeaderData();
-                    break;
-                case 0x78: /* no header */
-                    encryptionMode = EncryptionMode.NONE;
-                    decodeDataRecords(buffer, offset + 1, length - 1);
-                    break;
-                case 0x7a: /* short header */
-                    decodeShortHeader();
-                    break;
-                case 0x8d: /* Extended Link Layer */
-                    decodeExtendedLinkLayer(buffer, offset + 1); // 6 bytes header + CRC
-                    header = Arrays.copyOfRange(buffer, offset, offset + 7); // don't include CRC
-                    vdr = new byte[length - 7];
-                    System.arraycopy(buffer, offset + 7, vdr, 0, length - 7);
-                    if (encryptionMode.equals(EncryptionMode.AES_128)) {
-                        decryptMessage(getKey());
-                    }
+                    case 0x72:
+                        decodeLongHeaderData();
+                        break;
+                    case 0x78: /* no header */
+                        encryptionMode = EncryptionMode.NONE;
+                        decodeDataRecords(buffer, offset + 1, length - 1);
+                        break;
+                    case 0x7a: /* short header */
+                        decodeShortHeader();
+                        break;
+                    case 0x8d: /* Extended Link Layer */
+                        decodeExtendedLinkLayer(buffer, offset + 1); // 6 bytes header + CRC
+                        header = Arrays.copyOfRange(buffer, offset, offset + 7); // don't include CRC
+                        vdr = new byte[length - 7];
+                        System.arraycopy(buffer, offset + 7, vdr, 0, length - 7);
+                        if (encryptionMode.equals(EncryptionMode.AES_128)) {
+                            decryptMessage(getKey());
+                        }
 
-                    if ((vdr[2] & 0xff) == 0x78) {
-                        decodeDataRecords(vdr, 3, length - 10);
-                    }
-                    else if ((vdr[2] & 0xff) == 0x79) {
-                        decodeShortFrame(vdr, 3, length - 10);
-                    }
-                    break;
-                case 0x33:
-                    String msg = String.format(
-                            "Received telegram with CI 0x33. Decoding not implemented. Device Serial: %s, Manufacturer: %s.",
-                            linkLayerSecondaryAddress.getDeviceId().toString(),
-                            linkLayerSecondaryAddress.getManufacturerId());
-                    throw new DecodingException(msg);
-                default:
-                    String strFormat = "Unable to decode message with this CI Field: 0x%02X.";
-                    if ((ciField >= 0xA0) && (ciField <= 0xB7)) {
-                        strFormat = "Manufacturer specific CI: 0x%02X.";
-                    }
+                        if ((vdr[2] & 0xff) == 0x78) {
+                            decodeDataRecords(vdr, 3, length - 10);
+                        } else if ((vdr[2] & 0xff) == 0x79) {
+                            decodeShortFrame(vdr, 3, length - 10);
+                        }
+                        break;
+                    case 0x33:
+                        String msg = String.format(
+                                "Received telegram with CI 0x33. Decoding not implemented. Device Serial: %s, Manufacturer: %s.",
+                                linkLayerSecondaryAddress.getDeviceId().toString(),
+                                linkLayerSecondaryAddress.getManufacturerId());
+                        throw new DecodingException(msg);
+                    default:
+                        String strFormat = "Unable to decode message with this CI Field: 0x%02X.";
+                        if ((ciField >= 0xA0) && (ciField <= 0xB7)) {
+                            strFormat = "Manufacturer specific CI: 0x%02X.";
+                        }
 
-                    throw new DecodingException(String.format(strFormat, ciField));
+                        throw new DecodingException(String.format(strFormat, ciField));
                 }
             } catch (RuntimeException e) {
                 throw new DecodingException(e);
@@ -126,28 +130,28 @@ public class VariableDataStructure {
         decodeShortHeader(buffer, offset + 1);
 
         switch (encryptionMode) {
-        case NONE:
-            decodeDataRecords(buffer, offset + 5, length - 5);
-            break;
-        case AES_CBC_IV:
-            decryptAesCbcIv(buffer, offset + 5, numberOfEncryptedBlocks * 16);
-            break;
-        case AES_128:
-        case AES_CBC_IV_0:
-        case DES_CBC:
-        case DES_CBC_IV:
-        case RESERVED_04:
-        case RESERVED_06:
-        case RESERVED_08:
-        case RESERVED_09:
-        case RESERVED_10:
-        case RESERVED_11:
-        case RESERVED_12:
-        case RESERVED_14:
-        case RESERVED_15:
-        case TLS:
-        default:
-            throw new DecodingException("Unsupported encryption mode used: " + encryptionMode);
+            case NONE:
+                decodeDataRecords(buffer, offset + 5, length - 5);
+                break;
+            case AES_CBC_IV:
+                decryptAesCbcIv(buffer, offset + 5, numberOfEncryptedBlocks * 16);
+                break;
+            case AES_128:
+            case AES_CBC_IV_0:
+            case DES_CBC:
+            case DES_CBC_IV:
+            case RESERVED_04:
+            case RESERVED_06:
+            case RESERVED_08:
+            case RESERVED_09:
+            case RESERVED_10:
+            case RESERVED_11:
+            case RESERVED_12:
+            case RESERVED_14:
+            case RESERVED_15:
+            case TLS:
+            default:
+                throw new DecodingException("Unsupported encryption mode used: " + encryptionMode);
         }
     }
 
@@ -179,28 +183,28 @@ public class VariableDataStructure {
         System.arraycopy(buffer, offset + headerLength, vdr, 0, length - headerLength);
 
         switch (encryptionMode) {
-        case NONE:
-            // nothing to do
-            break;
-        case AES_CBC_IV:
-            decryptMessage(getKey());
-            break;
-        case AES_128:
-        case AES_CBC_IV_0:
-        case DES_CBC:
-        case DES_CBC_IV:
-        case RESERVED_04:
-        case RESERVED_06:
-        case RESERVED_08:
-        case RESERVED_09:
-        case RESERVED_10:
-        case RESERVED_11:
-        case RESERVED_12:
-        case RESERVED_14:
-        case RESERVED_15:
-        case TLS:
-        default:
-            throw new DecodingException("Unsupported encryption mode used: " + encryptionMode);
+            case NONE:
+                // nothing to do
+                break;
+            case AES_CBC_IV:
+                decryptMessage(getKey());
+                break;
+            case AES_128:
+            case AES_CBC_IV_0:
+            case DES_CBC:
+            case DES_CBC_IV:
+            case RESERVED_04:
+            case RESERVED_06:
+            case RESERVED_08:
+            case RESERVED_09:
+            case RESERVED_10:
+            case RESERVED_11:
+            case RESERVED_12:
+            case RESERVED_14:
+            case RESERVED_15:
+            case TLS:
+            default:
+                throw new DecodingException("Unsupported encryption mode used: " + encryptionMode);
         }
         decodeDataRecords(vdr, 0, length - headerLength);
     }
@@ -242,9 +246,9 @@ public class VariableDataStructure {
 
         communicationControl = buffer[i++];
         accessNumber = buffer[i++];
-        sessionNumber = new byte[] { buffer[i++], buffer[i++], buffer[i++], buffer[i++] };
+        sessionNumber = new byte[] {buffer[i++], buffer[i++], buffer[i++], buffer[i++]};
         encryptionMode = EncryptionMode.getInstance(sessionNumber[3] >> 5);
-        byte[] checksum = new byte[] { buffer[i++], buffer[i++] };
+        byte[] checksum = new byte[] {buffer[i++], buffer[i++]};
 
         byte[] crc = CRC16.calculateCrc16(Arrays.copyOfRange(buffer, i, buffer.length - 1));
         if (checksum[0] == crc[0] && checksum[1] == crc[1]) {
@@ -344,7 +348,6 @@ public class VariableDataStructure {
             } catch (IOException e) {
                 // ignore
             }
-
         }
     }
 
@@ -365,14 +368,14 @@ public class VariableDataStructure {
         }
 
         switch (encryptionMode) {
-        case AES_CBC_IV:
-            decryptAesCbcIv(key, len);
-            break;
-        case AES_128:
-            decryptAes128(key, len);
-            break;
-        default:
-            throw new DecodingException("Unsupported encryption mode: " + encryptionMode);
+            case AES_CBC_IV:
+                decryptAesCbcIv(key, len);
+                break;
+            case AES_128:
+                decryptAes128(key, len);
+                break;
+            default:
+                throw new DecodingException("Unsupported encryption mode: " + encryptionMode);
         }
 
         return vdr;
@@ -398,7 +401,6 @@ public class VariableDataStructure {
             throw new DecodingException(newDecyptionExceptionMsg());
         }
         System.arraycopy(result, 0, vdr, 0, len);
-
     }
 
     private String newDecyptionExceptionMsg() {
@@ -415,14 +417,12 @@ public class VariableDataStructure {
             System.arraycopy(saBytes, 0, iv, 4, 2); // Manufacture
             System.arraycopy(saBytes, 2, iv, 0, 4); // Identification
             System.arraycopy(saBytes, 6, iv, 6, 2); // Version and Device Type
-        }
-        else if (ciField == 0x72) {
+        } else if (ciField == 0x72) {
             saBytes = secondaryAddress.asByteArray();
             System.arraycopy(saBytes, 0, iv, 2, 4); // Identification
             System.arraycopy(saBytes, 4, iv, 0, 2); // Manufacture
             System.arraycopy(saBytes, 6, iv, 6, 2); // Version and Device Type
-        }
-        else {
+        } else {
             System.arraycopy(saBytes, 0, iv, 0, 8);
         }
 
@@ -454,8 +454,9 @@ public class VariableDataStructure {
             return key;
         }
 
-        String msg = "Unable to decode encrypted payload because no key for the following secondary address was registered: "
-                + linkLayerSecondaryAddress;
+        String msg =
+                "Unable to decode encrypted payload because no key for the following secondary address was registered: "
+                        + linkLayerSecondaryAddress;
         throw new DecodingException(msg);
     }
 
@@ -468,8 +469,7 @@ public class VariableDataStructure {
                 int to = from + length;
                 String hexString = HexUtils.bytesToHex(Arrays.copyOfRange(buffer, from, to));
                 return MessageFormat.format("VariableDataResponse has not been decoded. Bytes:\n{0}", hexString);
-            }
-            else {
+            } else {
                 builder.append("VariableDataResponse has not been fully decoded. " + dataRecords.size()
                         + " data records decoded.\n");
             }
@@ -503,5 +503,4 @@ public class VariableDataStructure {
         }
         return builder.toString();
     }
-
 }

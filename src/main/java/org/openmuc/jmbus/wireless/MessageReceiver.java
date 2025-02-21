@@ -39,7 +39,6 @@ abstract class MessageReceiver implements Runnable {
                 listener.newMessage(wmBusMessage);
             }
         });
-
     }
 
     protected void notifyDiscarded(final byte[] discardedBytes) {

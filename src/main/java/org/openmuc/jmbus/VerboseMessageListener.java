@@ -8,12 +8,12 @@ package org.openmuc.jmbus;
 import java.util.EventListener;
 
 /**
- * 
+ *
  * @see MBusConnection#setVerboseMessageListener(VerboseMessageListener)
  */
 public interface VerboseMessageListener extends EventListener {
     /**
-     * 
+     *
      * @param debugMessage
      */
     void newVerboseMessage(VerboseMessage debugMessage);

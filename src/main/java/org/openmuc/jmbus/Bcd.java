@@ -17,7 +17,7 @@ public class Bcd extends Number {
     /**
      * Constructs a <code>Bcd</code> from the given bytes. The constructed Bcd will use the given byte array for
      * internal storage of its value. It is therefore recommended not to change the byte array after construction.
-     * 
+     *
      * @param bcdBytes
      *            the byte array to be used for construction of the <code>Bcd</code>.
      */
@@ -36,8 +36,7 @@ public class Bcd extends Number {
 
         if ((value[value.length - 1] & 0xf0) == 0xf0) {
             bytes[c++] = 0x2d;
-        }
-        else {
+        } else {
             bytes[c++] = (byte) (((value[value.length - 1] >> 4) & 0x0f) + 48);
         }
 
@@ -83,12 +82,10 @@ public class Bcd extends Number {
 
         if ((value[value.length - 1] & 0xf0) == 0xf0) {
             result = result * -1;
-        }
-        else {
+        } else {
             result += ((value[value.length - 1] >> 4) & 0x0f) * factor;
         }
 
         return result;
     }
-
 }

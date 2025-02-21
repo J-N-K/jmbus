@@ -14,7 +14,7 @@ public interface SecondaryAddressListener extends EventListener {
 
     /**
      * New scan message.
-     * 
+     *
      * @param message
      *            messages from scan secondary address
      */
@@ -22,10 +22,9 @@ public interface SecondaryAddressListener extends EventListener {
 
     /**
      * New device found.
-     * 
+     *
      * @param secondaryAddress
      *            secondary address of detected device
      */
     void newDeviceFound(SecondaryAddress secondaryAddress);
-
 }

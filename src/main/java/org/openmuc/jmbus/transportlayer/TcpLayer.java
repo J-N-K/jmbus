@@ -99,7 +99,7 @@ class TcpLayer implements TransportLayer {
 
     /**
      * Flushes the input stream if it contains readable bytes
-     * 
+     *
      * @throws IOException
      *             if an error occurs while reading the input stream.
      */
@@ -113,5 +113,4 @@ class TcpLayer implements TransportLayer {
             throw new IOException("Error flushing input stream from TCP connection.", e);
         }
     }
-
 }

@@ -7,14 +7,13 @@ package org.openmuc.jmbus.wireless;
 
 import java.text.MessageFormat;
 import java.util.Map;
-
 import org.openmuc.jmbus.DecodingException;
 import org.openmuc.jmbus.SecondaryAddress;
 import org.openmuc.jmbus.VariableDataStructure;
 
 /**
  * Represents a wireless M-Bus link layer message without the CRC checksum.
- * 
+ *
  * {@link WMBusMessage} is structured as follows:
  * <ul>
  * <li>Length (1 byte) - the length (number of bytes) of the complete message without the length byte and the CRC bytes.
@@ -44,8 +43,12 @@ public class WMBusMessage {
     private final SecondaryAddress secondaryAddress;
     private final VariableDataStructure vdr;
 
-    private WMBusMessage(Integer signalStrengthInDBm, byte[] buffer, int controlField,
-            SecondaryAddress secondaryAddress, VariableDataStructure vdr) {
+    private WMBusMessage(
+            Integer signalStrengthInDBm,
+            byte[] buffer,
+            int controlField,
+            SecondaryAddress secondaryAddress,
+            VariableDataStructure vdr) {
         this.signalStrengthInDBm = signalStrengthInDBm;
         this.buffer = buffer;
         this.controlField = controlField;
@@ -62,8 +65,8 @@ public class WMBusMessage {
 
         if (length > (buffer.length - 1)) {
             String msg = MessageFormat.format(
-                    "Byte buffer has only a length of {0} while the specified length field is {1}.", buffer.length,
-                    length);
+                    "Byte buffer has only a length of {0} while the specified length field is {1}.",
+                    buffer.length, length);
             throw new DecodingException(msg);
         }
 
@@ -76,7 +79,7 @@ public class WMBusMessage {
 
     /**
      * Get the message as binary large object (byte array).
-     * 
+     *
      * @return the byte array representation of the message.
      */
     public byte[] asBlob() {
@@ -89,7 +92,7 @@ public class WMBusMessage {
 
     /**
      * Get the secondary address.
-     * 
+     *
      * @return the secondary address.
      */
     public SecondaryAddress getSecondaryAddress() {
@@ -98,7 +101,7 @@ public class WMBusMessage {
 
     /**
      * Get the variable data structure of the message.
-     * 
+     *
      * @return the variable data structure.
      */
     public VariableDataStructure getVariableDataResponse() {
@@ -107,7 +110,7 @@ public class WMBusMessage {
 
     /**
      * Returns the received signal string indication (RSSI) in dBm.
-     * 
+     *
      * @return the RSSI.
      */
     public Integer getRssi() {
@@ -119,7 +122,9 @@ public class WMBusMessage {
         StringBuilder builder = new StringBuilder();
 
         if (signalStrengthInDBm != null) {
-            builder.append("Message was received with signal strength: ").append(signalStrengthInDBm).append("dBm\n");
+            builder.append("Message was received with signal strength: ")
+                    .append(signalStrengthInDBm)
+                    .append("dBm\n");
         }
 
         return builder.append("Control Field: ")
@@ -130,5 +135,4 @@ public class WMBusMessage {
                 .append(vdr)
                 .toString();
     }
-
 }

@@ -10,11 +10,9 @@ import gnu.io.NoSuchPortException;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 
 class SerialLayer implements TransportLayer {
     private final int timeout;
@@ -35,7 +33,10 @@ class SerialLayer implements TransportLayer {
         try {
             portIdentifier = CommPortIdentifier.getPortIdentifier(serialBuilder.getSerialPortName());
             serialPort = portIdentifier.open("jMBus", timeout);
-            serialPort.setSerialPortParams(serialBuilder.getBaudrate(), serialBuilder.getDataBits(), serialBuilder.getStopBits(),
+            serialPort.setSerialPortParams(
+                    serialBuilder.getBaudrate(),
+                    serialBuilder.getDataBits(),
+                    serialBuilder.getStopBits(),
                     serialBuilder.getParity());
             os = new DataOutputStream(serialPort.getOutputStream());
             is = new DataInputStream(serialPort.getInputStream());
@@ -81,5 +82,4 @@ class SerialLayer implements TransportLayer {
     public int getTimeout() {
         return serialPort.getReceiveTimeout();
     }
-
 }

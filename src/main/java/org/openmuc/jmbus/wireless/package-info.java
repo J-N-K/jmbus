@@ -5,7 +5,7 @@
  */
 /**
  * This package contain relevant classes to receive wireless M-Bus messages.
- * 
+ *
  * @see org.openmuc.jmbus.wireless.WMBusConnection.WMBusSerialBuilder
  * @see org.openmuc.jmbus.wireless.WMBusConnection
  */

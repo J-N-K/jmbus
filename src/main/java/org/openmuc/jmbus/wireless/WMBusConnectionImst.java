@@ -11,7 +11,6 @@ import java.io.InterruptedIOException;
 import java.nio.ByteBuffer;
 import java.text.MessageFormat;
 import java.util.Arrays;
-
 import org.openmuc.jmbus.DecodingException;
 import org.openmuc.jmbus.HexUtils;
 import org.openmuc.jmbus.transportlayer.TransportLayer;
@@ -79,8 +78,7 @@ class WMBusConnectionImst extends AbstractWMBusConnection {
 
                 if (hciMessage.getPayload()[1] == MBUS_BL_CONTROL) {
                     return hciMessage;
-                }
-                else {
+                } else {
                     discard(hciMessage);
                 }
             }
@@ -117,15 +115,15 @@ class WMBusConnectionImst extends AbstractWMBusConnection {
 
     private static byte linkRadioModeFor(WMBusMode mode) throws IOException {
         switch (mode) {
-        case S:
-            return 0x01; // Link/Radio Mode: S1-m
-        case T:
-            return 0x04; // Link/Radio Mode: T2
-        case C:
-            return 0x08; // Link/Radio Mode: C2 with telegram format A (C2 + format B = 0x09)
-        default:
-            String msg = MessageFormat.format("wMBUS Mode ''{0}'' is not supported", mode);
-            throw new IOException(msg);
+            case S:
+                return 0x01; // Link/Radio Mode: S1-m
+            case T:
+                return 0x04; // Link/Radio Mode: T2
+            case C:
+                return 0x08; // Link/Radio Mode: C2 with telegram format A (C2 + format B = 0x09)
+            default:
+                String msg = MessageFormat.format("wMBUS Mode ''{0}'' is not supported", mode);
+                throw new IOException(msg);
         }
     }
 
@@ -153,7 +151,7 @@ class WMBusConnectionImst extends AbstractWMBusConnection {
             System.arraycopy(payload, i * payloadSendLength, payloadSend, 0, payloadSendLength);
 
             byte controlField_EndpointField = (byte) ((controlField << 4) | endpointId & 0xff);
-            byte[] hciHeader = { Const.START_OF_FRAME, controlField_EndpointField, msgId, (byte) payloadSendLength };
+            byte[] hciHeader = {Const.START_OF_FRAME, controlField_EndpointField, msgId, (byte) payloadSendLength};
 
             byte[] hciMessage = new byte[Const.HCI_HEADER_LENGTH + payloadSendLength];
             System.arraycopy(hciHeader, 0, hciMessage, 0, hciHeader.length);
@@ -270,7 +268,8 @@ class WMBusConnectionImst extends AbstractWMBusConnection {
      */
     private static class HciMessage {
 
-        private final byte controlField;;
+        private final byte controlField;
+        ;
         private final byte endpointID;
         private final byte msgId;
         private final int length;
@@ -280,8 +279,15 @@ class WMBusConnectionImst extends AbstractWMBusConnection {
         private final int rSSI;
         private final int fCS;
 
-        private HciMessage(byte controlField, byte endpointID, byte msgId, int length, byte[] payload, int timeStamp,
-                int rSSI, int fCS) {
+        private HciMessage(
+                byte controlField,
+                byte endpointID,
+                byte msgId,
+                int length,
+                byte[] payload,
+                int timeStamp,
+                int rSSI,
+                int fCS) {
             this.controlField = controlField;
             this.endpointID = endpointID;
             this.msgId = msgId;
@@ -352,7 +358,8 @@ class WMBusConnectionImst extends AbstractWMBusConnection {
 
         @Override
         public String toString() {
-            return new StringBuilder().append("Control Field: ")
+            return new StringBuilder()
+                    .append("Control Field: ")
                     .append(byteAsHexString(controlField))
                     .append("\nEndpointID:    ")
                     .append(byteAsHexString(endpointID))
@@ -382,7 +389,5 @@ class WMBusConnectionImst extends AbstractWMBusConnection {
         public int getRSSI() {
             return rSSI;
         }
-
     }
-
 }

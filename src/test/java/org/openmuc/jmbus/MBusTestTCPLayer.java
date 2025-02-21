@@ -3,7 +3,6 @@ package org.openmuc.jmbus;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import org.openmuc.jmbus.transportlayer.TransportLayer;
 
 public class MBusTestTCPLayer implements TransportLayer {
@@ -52,5 +51,4 @@ public class MBusTestTCPLayer implements TransportLayer {
     public int getTimeout() throws IOException {
         return timeout;
     }
-
 }

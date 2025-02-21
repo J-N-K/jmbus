@@ -22,7 +22,7 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
     /**
      * Constructor of the Serial Settings Builder, for connecting M-Bus devices over serial connections like RS232 and
      * RS485. With default settings.
-     * 
+     *
      * @param serialPortName
      *            examples for serial port identifiers are on Linux "/dev/ttyS0" or "/dev/ttyUSB0" and on Windows "COM1"
      **/
@@ -57,7 +57,7 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
 
     /**
      * Sets the baudrate of the device
-     * 
+     *
      * @param baudrate
      *            the baud rate to use.
      * @return the builder itself
@@ -69,7 +69,7 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
 
     /**
      * Sets the serial port name of the device
-     * 
+     *
      * @param serialPortName
      *            examples for serial port identifiers are on Linux {@code "/dev/ttyS0"} or {@code "/dev/ttyUSB0"} and
      *            on Windows {@code "COM1"}.
@@ -82,7 +82,7 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
 
     /**
      * Sets the number of DataBits, default is {@link SerialPort#DATABITS_8}.
-     * 
+     *
      * @param dataBits
      *            the new number of databits.
      * @return the builder itself.
@@ -94,7 +94,7 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
 
     /**
      * Sets the stop bits, default is 1
-     * 
+     *
      * @param stopBits
      *            Possible values are 1, 1.5 or 2
      * @return the builder itself
@@ -106,7 +106,7 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
 
     /**
      * Sets the parity, default is NONE
-     * 
+     *
      * @param parity
      *            Possible values are NONE, EVEN, ODD, SPACE or MARK.
      * @return the builder itself
@@ -120,5 +120,4 @@ public abstract class SerialBuilder<T, S extends SerialBuilder<T, S>> extends Bu
     protected TransportLayer buildTransportLayer() {
         return new SerialLayer(getTimeout(), (SerialBuilder<?, ?>) this);
     }
-
 }

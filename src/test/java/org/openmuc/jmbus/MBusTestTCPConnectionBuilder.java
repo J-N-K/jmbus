@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import org.openmuc.jmbus.MBusConnection.MBusTcpBuilder;
 import org.openmuc.jmbus.transportlayer.TransportLayer;
 
@@ -14,29 +13,30 @@ public class MBusTestTCPConnectionBuilder extends MBusTcpBuilder {
     private final ByteArrayOutputStream os;
     private final ByteArrayInputStream is;
 
-    protected MBusTestTCPConnectionBuilder(String hostAddress, int port, final ByteArrayInputStream is,
-            final ByteArrayOutputStream os) throws IOException {
+    protected MBusTestTCPConnectionBuilder(
+            String hostAddress, int port, final ByteArrayInputStream is, final ByteArrayOutputStream os)
+            throws IOException {
         super(hostAddress, port);
         this.os = os;
         this.is = is;
 
         new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    synchronized (is) {
-                        // check if a short request message has been sent
-                        if (os.size() == 5) {
-                            // simulate a correct response message
-                            is.reset();
-                            is.notifyAll();
+                    @Override
+                    public void run() {
+                        while (true) {
+                            synchronized (is) {
+                                // check if a short request message has been sent
+                                if (os.size() == 5) {
+                                    // simulate a correct response message
+                                    is.reset();
+                                    is.notifyAll();
+                                }
+                            }
+                            break;
                         }
                     }
-                    break;
-                }
-            }
-        }).start();
-
+                })
+                .start();
     }
 
     @Override
@@ -61,5 +61,4 @@ public class MBusTestTCPConnectionBuilder extends MBusTcpBuilder {
         };
         return new MBusTestTCPLayer(blockingInputStream, new DataOutputStream(os));
     }
-
 }

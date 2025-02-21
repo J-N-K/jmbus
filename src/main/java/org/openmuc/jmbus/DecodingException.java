@@ -23,5 +23,4 @@ public class DecodingException extends Exception {
     public DecodingException(String msg, Throwable cause) {
         super(msg, cause);
     }
-
 }

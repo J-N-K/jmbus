@@ -9,7 +9,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.junit.Test;
 import org.openmuc.jmbus.DataRecord;
 import org.openmuc.jmbus.DecodingException;
@@ -18,8 +17,8 @@ import org.openmuc.jmbus.SecondaryAddress;
 
 public class DecryptionTest {
 
-    private final byte[] testFrameKamstrupEncrypted = HexUtils
-            .hexToBytes("24442D2C692845631B168D3050209CD621B006B1140AEF4953AE5B86FAFC0B00E70705B84689");
+    private final byte[] testFrameKamstrupEncrypted =
+            HexUtils.hexToBytes("24442D2C692845631B168D3050209CD621B006B1140AEF4953AE5B86FAFC0B00E70705B84689");
 
     @Test
     public void testDecryption() throws Exception {
@@ -27,9 +26,20 @@ public class DecryptionTest {
 
         WMBusMessage wmBusDataMessage = decodewith(goodKey);
 
-        assertEquals(DataRecord.FunctionField.INST_VAL,
-                wmBusDataMessage.getVariableDataResponse().getDataRecords().get(1).getFunctionField());
-        assertEquals(474.24, wmBusDataMessage.getVariableDataResponse().getDataRecords().get(1).getScaledDataValue(),
+        assertEquals(
+                DataRecord.FunctionField.INST_VAL,
+                wmBusDataMessage
+                        .getVariableDataResponse()
+                        .getDataRecords()
+                        .get(1)
+                        .getFunctionField());
+        assertEquals(
+                474.24,
+                wmBusDataMessage
+                        .getVariableDataResponse()
+                        .getDataRecords()
+                        .get(1)
+                        .getScaledDataValue(),
                 0.001);
     }
 

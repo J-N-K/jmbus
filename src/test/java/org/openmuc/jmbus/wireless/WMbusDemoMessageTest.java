@@ -11,7 +11,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.junit.Test;
 import org.openmuc.jmbus.DecodingException;
 import org.openmuc.jmbus.DeviceType;
@@ -69,8 +68,8 @@ public class WMbusDemoMessageTest {
         assertEquals(DeviceType.RADIO_CONVERTER_METER_SIDE, secondaryAddress.getDeviceType());
     }
 
-    private SecondaryAddress getSecondaryAddressFromMessage(byte[] testMessage, byte[] key,
-            String secondaryAddressString) throws DecodingException {
+    private SecondaryAddress getSecondaryAddressFromMessage(
+            byte[] testMessage, byte[] key, String secondaryAddressString) throws DecodingException {
         Map<SecondaryAddress, byte[]> keyMap = getKeyMap(secondaryAddressString, key);
         SecondaryAddress messageSecondaryAddress = decodeWMBusMessage(keyMap, testMessage);
         return messageSecondaryAddress;
@@ -78,8 +77,8 @@ public class WMbusDemoMessageTest {
 
     private Map<SecondaryAddress, byte[]> getKeyMap(String secondaryAddressString, byte[] key) {
         Map<SecondaryAddress, byte[]> keyMap = new HashMap<>();
-        SecondaryAddress secondaryAddress = SecondaryAddress
-                .newFromLongHeader(HexUtils.hexToBytes(secondaryAddressString), 0);
+        SecondaryAddress secondaryAddress =
+                SecondaryAddress.newFromLongHeader(HexUtils.hexToBytes(secondaryAddressString), 0);
         keyMap.put(secondaryAddress, key);
         return keyMap;
     }
@@ -95,5 +94,4 @@ public class WMbusDemoMessageTest {
 
         return decodedMessage.getSecondaryAddress();
     }
-
 }

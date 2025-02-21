@@ -12,7 +12,6 @@ import java.io.InterruptedIOException;
 import java.nio.ByteBuffer;
 import java.text.MessageFormat;
 import java.util.Arrays;
-
 import org.openmuc.jmbus.DecodingException;
 import org.openmuc.jmbus.transportlayer.TransportLayer;
 
@@ -52,7 +51,6 @@ class WMBusConnectionAmber extends AbstractWMBusConnection {
                 close();
                 super.shutdown();
             }
-
         }
 
         private void task() throws IOException {
@@ -113,12 +111,10 @@ class WMBusConnectionAmber extends AbstractWMBusConnection {
                 }
                 if (crc == countedCRC) {
                     notifyListener(data);
-                }
-                else {
+                } else {
                     notifyDiscarded(data);
                 }
-            }
-            else {
+            } else {
                 // parse data without CRC check
                 notifyListener(data);
             }
@@ -134,8 +130,7 @@ class WMBusConnectionAmber extends AbstractWMBusConnection {
             int rssiOffset = 74;
             if (rssi >= 128) {
                 signalStrengthInDBm = ((rssi - 256) / 2) - rssiOffset;
-            }
-            else {
+            } else {
                 signalStrengthInDBm = (rssi / 2) - rssiOffset;
             }
 
@@ -163,7 +158,6 @@ class WMBusConnectionAmber extends AbstractWMBusConnection {
                 discardCount = 0;
             }
         }
-
     }
 
     public WMBusConnectionAmber(WMBusMode mode, WMBusListener listener, TransportLayer tl) {
@@ -183,25 +177,25 @@ class WMBusConnectionAmber extends AbstractWMBusConnection {
     @Override
     protected void initializeWirelessTransceiver(WMBusMode mode) throws IOException {
         switch (mode) {
-        case S:
-            amberSetReg((byte) 0x46, (byte) 0x03);
-            break;
-        case T:
-            amberSetReg((byte) 0x46, (byte) 0x08); // T2-OTHER (correct for receiving station in T mode)
-            break;
-        case C:
-            amberSetReg((byte) 0x46, (byte) 0x0e); // C2-OTHER
-            break;
-        default:
-            String message = MessageFormat.format("wMBUS Mode ''{0}'' is not supported", mode.toString());
-            throw new IOException(message);
+            case S:
+                amberSetReg((byte) 0x46, (byte) 0x03);
+                break;
+            case T:
+                amberSetReg((byte) 0x46, (byte) 0x08); // T2-OTHER (correct for receiving station in T mode)
+                break;
+            case C:
+                amberSetReg((byte) 0x46, (byte) 0x0e); // C2-OTHER
+                break;
+            default:
+                String message = MessageFormat.format("wMBUS Mode ''{0}'' is not supported", mode.toString());
+                throw new IOException(message);
         }
         amberSetReg((byte) 0x45, (byte) 0x01); // Enable attaching RSSI to message
     }
 
     /**
      * Writes a {@code CMD_SET_REQ} to the Amber module.
-     * 
+     *
      * @param cmd
      *            register address of the Amber module.
      * @param data
@@ -212,7 +206,11 @@ class WMBusConnectionAmber extends AbstractWMBusConnection {
     private void writeCommand(byte cmd, byte[] data) throws IOException {
         DataOutputStream os = getOutputStream();
 
-        byte[] header = ByteBuffer.allocate(3).put((byte) 0xFF).put(cmd).put((byte) data.length).array();
+        byte[] header = ByteBuffer.allocate(3)
+                .put((byte) 0xFF)
+                .put(cmd)
+                .put((byte) data.length)
+                .array();
 
         os.write(header);
         os.write(data);
@@ -220,21 +218,19 @@ class WMBusConnectionAmber extends AbstractWMBusConnection {
         byte checksum = computeCheckSum(data, computeCheckSum(header, (byte) 0));
 
         os.write(checksum);
-
     }
 
     private void amberSetReg(byte reg, byte value) throws IOException {
-        byte[] data = { reg, 0x01, value };
+        byte[] data = {reg, 0x01, value};
 
         writeCommand((byte) 0x09, data);
 
         discardNoise();
-
     }
 
     /**
      * Writes a reset command to the Amber module
-     * 
+     *
      * @throws IOException
      *             if the reset command failed.
      */
@@ -248,5 +244,4 @@ class WMBusConnectionAmber extends AbstractWMBusConnection {
         }
         return checksum;
     }
-
 }

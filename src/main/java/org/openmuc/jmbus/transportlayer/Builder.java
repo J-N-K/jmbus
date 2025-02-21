@@ -25,7 +25,7 @@ public abstract class Builder<C, B extends Builder<C, B>> {
 
     /**
      * Set the connection timeout. The timeout must be &ge; zero. A timeout of zero is interpreted as infinite timeout,
-     * 
+     *
      * @param timeout
      *            a timeout in milliseconds.
      * @return the builder itself.
@@ -46,7 +46,7 @@ public abstract class Builder<C, B extends Builder<C, B>> {
 
     /**
      * Build the TransportLayer with the given settings.
-     * 
+     *
      * @return TransportLayer to connect to the M-Bus device
      * @throws IOException
      *             if an I/O exception occurred.
@@ -55,7 +55,7 @@ public abstract class Builder<C, B extends Builder<C, B>> {
 
     /**
      * This return an active M-Bus connection.
-     * 
+     *
      * @return a new active M-Bus connection.
      * @throws IOException
      *             if an I/O exception occurred opening the connection to the remote device.

@@ -13,7 +13,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.List;
-
 import org.openmuc.jmbus.MBusMessage.MessageType;
 import org.openmuc.jmbus.VerboseMessage.MessageDirection;
 import org.openmuc.jmbus.transportlayer.SerialBuilder;
@@ -25,7 +24,7 @@ import org.openmuc.jmbus.transportlayer.TransportLayer;
  * <p>
  * Use this access point to communicate using the M-Bus wired protocol.
  * </p>
- * 
+ *
  * @see MBusConnection#newSerialBuilder(String)
  * @see MBusConnection#newTcpBuilder(String, int)
  */
@@ -55,7 +54,7 @@ public class MBusConnection implements AutoCloseable {
 
     /**
      * Creates an M-Bus Service Access Point that is used to read meters.
-     * 
+     *
      * @param transportLayer
      *            Underlying transport layer
      * @see MBusConnection#open()
@@ -92,7 +91,7 @@ public class MBusConnection implements AutoCloseable {
 
     /**
      * Sets the verbose mode on if a implementation of debugMessageListener has been set.
-     * 
+     *
      * @param verboseMessageListener
      *            Implementation of debugMessageListener
      */
@@ -103,7 +102,7 @@ public class MBusConnection implements AutoCloseable {
     /**
      * Scans for secondary addresses and returns all detected devices in a list and if SecondaryAddressListener not null
      * to the listen listener.
-     * 
+     *
      * @param wildcardMask
      *            a wildcard mask for masking
      * @param secondaryAddressListener
@@ -111,14 +110,14 @@ public class MBusConnection implements AutoCloseable {
      *            If null, all detected address will only returned if finished.
      * @param delay
      *            delay between every sent message. Sometimes needed for slow devices. Deactivated if 0 or less.
-     * 
+     *
      * @return a list of secondary addresses of all detected devices
      * @throws IOException
      *             if any kind of error (including timeout) occurs while writing to the remote device. Note that the
      *             connection is not closed when an IOException is thrown.
      */
-    public List<SecondaryAddress> scan(String wildcardMask, SecondaryAddressListener secondaryAddressListener,
-            long delay) throws IOException {
+    public List<SecondaryAddress> scan(
+            String wildcardMask, SecondaryAddressListener secondaryAddressListener, long delay) throws IOException {
 
         if (wildcardMask == null || wildcardMask.isEmpty()) {
             wildcardMask = "ffffffff";
@@ -130,7 +129,7 @@ public class MBusConnection implements AutoCloseable {
     /**
      * Reads a meter using primary addressing. Sends a data request (REQ_UD2) to the remote device and returns the
      * variable data structure from the received RSP_UD frame.
-     * 
+     *
      * @param primaryAddress
      *            the primary address of the meter to read. For secondary address use 0xfd.
      * @return the variable data structure from the received RSP_UD frame
@@ -146,8 +145,7 @@ public class MBusConnection implements AutoCloseable {
         if (frameCountBits[primaryAddress]) {
             sendShortMessage(primaryAddress, 0x7b);
             frameCountBits[primaryAddress] = false;
-        }
-        else {
+        } else {
             sendShortMessage(primaryAddress, 0x5b);
             frameCountBits[primaryAddress] = true;
         }
@@ -178,7 +176,7 @@ public class MBusConnection implements AutoCloseable {
      * {@link MBusConnection}.<br>
      * If no response message is expected, set hasResponse to false. Returns <code>null</code> if hasResponse is
      * <code>false</code>
-     * 
+     *
      * @param primaryAddr
      *            the primary address of the meter to read. For secondary address use 0xfd.
      * @param controlField
@@ -214,7 +212,7 @@ public class MBusConnection implements AutoCloseable {
      * For normal readout use {@link MBusConnection#read(int)}.<br>
      * If no response message is expected, set hasResponse to false. Returns <code>null</code> if hasResponse is
      * <code>false</code>
-     * 
+     *
      * @param primaryAddr
      *            the primary address of the meter to read. For secondary address use 0xfd.
      * @param cmd
@@ -242,7 +240,7 @@ public class MBusConnection implements AutoCloseable {
     /**
      * Writes to a meter using primary addressing. Sends a data send (SND_UD) to the remote device and returns a true if
      * slave sends a 0x7e else false
-     * 
+     *
      * @param primaryAddress
      *            the primary address of the meter to write. For secondary address use 0xfd.
      * @param data
@@ -262,12 +260,11 @@ public class MBusConnection implements AutoCloseable {
         if (mBusMessage.getMessageType() != MessageType.SINGLE_CHARACTER) {
             throw new IOException("Unable to select component.");
         }
-
     }
 
     /**
      * Selects the meter with the specified secondary address. After this the meter can be read on primary address 0xfd.
-     * 
+     *
      * @param secondaryAddress
      *            the secondary address of the meter to select.
      * @throws IOException
@@ -281,7 +278,7 @@ public class MBusConnection implements AutoCloseable {
 
     /**
      * Deselects the previously selected meter.
-     * 
+     *
      * @throws IOException
      *             if any kind of error (including timeout) occurs while trying to read the remote device. Note that the
      *             connection is not closed when an IOException is thrown.
@@ -296,7 +293,7 @@ public class MBusConnection implements AutoCloseable {
 
     /**
      * Selection of wanted records.
-     * 
+     *
      * @param primaryAddress
      *            primary address of the slave
      * @param dataRecords
@@ -320,7 +317,7 @@ public class MBusConnection implements AutoCloseable {
 
     /**
      * Sends a application reset to the slave with specified primary address.
-     * 
+     *
      * @param primaryAddress
      *            primary address of the slave
      * @throws IOException
@@ -338,7 +335,7 @@ public class MBusConnection implements AutoCloseable {
 
     /**
      * Sends a SND_NKE message to reset the FCB (frame counter bit).
-     * 
+     *
      * @param primaryAddress
      *            the primary address of the meter to reset.
      * @throws IOException
@@ -361,8 +358,7 @@ public class MBusConnection implements AutoCloseable {
         // send select/deselect
         if (deselect) {
             sendLongMessage(0xfd, 0x53, 0x56, 8, ba);
-        }
-        else {
+        } else {
             sendLongMessage(0xfd, 0x53, 0x52, 8, ba);
         }
 
@@ -377,9 +373,10 @@ public class MBusConnection implements AutoCloseable {
         byte[] ba = new byte[8];
 
         ((ByteBuffer) ByteBuffer.allocate(8)
-                .order(ByteOrder.LITTLE_ENDIAN)
-                .put(secondaryAddress.asByteArray())
-                .position(0)).get(ba, 0, 8);
+                        .order(ByteOrder.LITTLE_ENDIAN)
+                        .put(secondaryAddress.asByteArray())
+                        .position(0))
+                .get(ba, 0, 8);
         return ba;
     }
 
@@ -433,9 +430,8 @@ public class MBusConnection implements AutoCloseable {
         byte[] receivedBytes;
         int b0 = is.read();
         if (b0 == SINGLE_CHARACTER) {
-            receivedBytes = new byte[] { (byte) b0 };
-        }
-        else if ((b0 & 0xff) == START_BYTE) {
+            receivedBytes = new byte[] {(byte) b0};
+        } else if ((b0 & 0xff) == START_BYTE) {
             int b1 = is.readByte() & 0xff;
 
             /**
@@ -457,14 +453,12 @@ public class MBusConnection implements AutoCloseable {
                 return receiveMessage();
             }
 
-        }
-        else if ((b0 & 0xff) == 0x10) {
+        } else if ((b0 & 0xff) == 0x10) {
             // skip undesired Short Frame (echo)
             receivedBytes = new byte[4];
             is.readFully(receivedBytes, 0, 4);
             return receiveMessage();
-        }
-        else {
+        } else {
             throw new IOException(String.format("Received unknown message: %02X", b0));
         }
 
@@ -515,12 +509,11 @@ public class MBusConnection implements AutoCloseable {
             mBusConnection.open();
             return mBusConnection;
         }
-
     }
 
     /**
      * Create a new builder to connect to a serial.
-     * 
+     *
      * @param serialPortName
      *            the serial port. e.g. <code>/dev/ttyS0</code>.
      * @return a new connection builder.
@@ -541,7 +534,5 @@ public class MBusConnection implements AutoCloseable {
             mBusConnection.open();
             return mBusConnection;
         }
-
     }
-
 }

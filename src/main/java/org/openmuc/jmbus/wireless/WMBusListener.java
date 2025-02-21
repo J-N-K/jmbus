@@ -15,7 +15,7 @@ public interface WMBusListener extends EventListener {
 
     /**
      * Received a new wireless M-Bus message.
-     * 
+     *
      * @param message
      *            the message.
      */
@@ -23,7 +23,7 @@ public interface WMBusListener extends EventListener {
 
     /**
      * Callback, when noisy data has been discarded.
-     * 
+     *
      * @param bytes
      *            the data which has been discarded.
      */
@@ -31,10 +31,9 @@ public interface WMBusListener extends EventListener {
 
     /**
      * Callback, if the connection has been interrupted.
-     * 
+     *
      * @param cause
      *            the cause of the interruption.
      */
     void stoppedListening(IOException cause);
-
 }

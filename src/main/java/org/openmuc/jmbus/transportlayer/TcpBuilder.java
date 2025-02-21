@@ -17,7 +17,7 @@ public abstract class TcpBuilder<T, S extends TcpBuilder<T, S>> extends Builder<
 
     /**
      * Constructor of the TCP/IP Settings Builder, for connecting M-Bus devices over TCP/IP.
-     * 
+     *
      * @param hostAddress
      *            examples for IP host address port are "127.0.0.1, localhost, ..."
      * @param port
@@ -30,11 +30,11 @@ public abstract class TcpBuilder<T, S extends TcpBuilder<T, S>> extends Builder<
 
     /**
      * Sets the TCP port of this communication
-     * 
+     *
      * @param port
      *            the TCP port of the host
      * @return the builder itself
-     * 
+     *
      **/
     public S setPort(int port) {
         this.port = port;
@@ -43,7 +43,7 @@ public abstract class TcpBuilder<T, S extends TcpBuilder<T, S>> extends Builder<
 
     /**
      * Sets the IP host address of the device
-     * 
+     *
      * @param hostAddress
      *            examples for IP host address port are "127.0.0.1, localhost, ..."
      * @return the builder itself
@@ -55,11 +55,11 @@ public abstract class TcpBuilder<T, S extends TcpBuilder<T, S>> extends Builder<
 
     /**
      * Sets the TCP connection timeout.
-     * 
+     *
      * @param connectionTimeout
      *            the TCP connection timeout
      * @return the builder itself
-     * 
+     *
      **/
     public S setConnectionTimeout(int connectionTimeout) {
         this.connectionTimeout = connectionTimeout;

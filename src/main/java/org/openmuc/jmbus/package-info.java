@@ -5,7 +5,7 @@
  */
 /**
  * Main jmbus package.
- * 
+ *
  * @see org.openmuc.jmbus.MBusConnection
  */
 package org.openmuc.jmbus;

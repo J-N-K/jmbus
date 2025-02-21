@@ -21,8 +21,7 @@ class CRC16 {
             for (i = 0x80; i != 0; i >>= 1) {
                 if ((crcVal & 0x8000) != 0) {
                     crcVal = (crcVal << 1) ^ poly;
-                }
-                else {
+                } else {
                     crcVal = crcVal << 1;
                 }
                 if ((b & i) != 0) {
@@ -31,7 +30,9 @@ class CRC16 {
             }
         }
 
-        byte[] tmpCrc = ByteBuffer.allocate(4).putInt(Integer.reverseBytes(crcVal & 0xffff ^ xorValue)).array();
+        byte[] tmpCrc = ByteBuffer.allocate(4)
+                .putInt(Integer.reverseBytes(crcVal & 0xffff ^ xorValue))
+                .array();
         crc[0] = tmpCrc[0];
         crc[1] = tmpCrc[1];
 
@@ -40,7 +41,7 @@ class CRC16 {
 
     /**
      * Computes the CRC16 according EN13757.
-     * 
+     *
      * @param bytes
      *            the data to be checked.
      * @return the CRC16 result.
@@ -52,6 +53,5 @@ class CRC16 {
     /**
      * Do not let this class be instantiated.
      */
-    private CRC16() {
-    }
+    private CRC16() {}
 }

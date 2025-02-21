@@ -5,10 +5,9 @@
  */
 package org.openmuc.jmbus.wireless;
 
+import gnu.io.SerialPort;
 import java.io.IOException;
 import java.text.MessageFormat;
-
-import gnu.io.SerialPort;
 import org.openmuc.jmbus.SecondaryAddress;
 import org.openmuc.jmbus.transportlayer.SerialBuilder;
 import org.openmuc.jmbus.transportlayer.TcpBuilder;
@@ -16,7 +15,7 @@ import org.openmuc.jmbus.transportlayer.TransportLayer;
 
 /**
  * A Wireless Mbus Connection.
- * 
+ *
  * @see #addKey(SecondaryAddress, byte[])
  */
 public interface WMBusConnection extends AutoCloseable {
@@ -30,22 +29,22 @@ public interface WMBusConnection extends AutoCloseable {
     /**
      * Stores a pair of secondary address and cryptographic key. The stored keys are automatically used to decrypt
      * messages when a wireless M-Bus message is been decoded.
-     * 
+     *
      * @param address
      *            the secondary address.
      * @param key
      *            the cryptographic key.
-     * 
+     *
      * @see #removeKey(SecondaryAddress)
      */
     void addKey(SecondaryAddress address, byte[] key);
 
     /**
      * Removes the stored key for the given secondary address.
-     * 
+     *
      * @param address
      *            the secondary address for which to remove the stored key.
-     * 
+     *
      * @see #addKey(SecondaryAddress, byte[])
      */
     void removeKey(SecondaryAddress address);
@@ -59,18 +58,19 @@ public interface WMBusConnection extends AutoCloseable {
             builder = new Builder(wmBusManufacturer, listener);
 
             switch (wmBusManufacturer) {
-            case RADIO_CRAFTS:
-                setBaudrate(19200);
-                break;
-            case AMBER:
-                setBaudrate(9600);
-                break;
-            case IMST:
-                setBaudrate(57600);
-                break;
-            default:
-                // should not occur
-                throw new RuntimeException(MessageFormat.format("Error unknown manufacturer {0}.", wmBusManufacturer));
+                case RADIO_CRAFTS:
+                    setBaudrate(19200);
+                    break;
+                case AMBER:
+                    setBaudrate(9600);
+                    break;
+                case IMST:
+                    setBaudrate(57600);
+                    break;
+                default:
+                    // should not occur
+                    throw new RuntimeException(
+                            MessageFormat.format("Error unknown manufacturer {0}.", wmBusManufacturer));
             }
             setStopBits(SerialPort.STOPBITS_1).setParity(SerialPort.PARITY_NONE).setDataBits(SerialPort.DATABITS_8);
         }
@@ -94,15 +94,14 @@ public interface WMBusConnection extends AutoCloseable {
         public WMBusConnection build() throws IOException {
             return builder.build(buildTransportLayer());
         }
-
     }
 
     class WMBusTcpBuilder extends TcpBuilder<WMBusConnection, WMBusTcpBuilder> {
 
         private final Builder builder;
 
-        public WMBusTcpBuilder(WMBusManufacturer wmBusManufacturer, WMBusListener listener, String hostAddress,
-                int port) {
+        public WMBusTcpBuilder(
+                WMBusManufacturer wmBusManufacturer, WMBusListener listener, String hostAddress, int port) {
             super(hostAddress, port);
             builder = new Builder(wmBusManufacturer, listener);
         }
@@ -126,7 +125,6 @@ public interface WMBusConnection extends AutoCloseable {
         public WMBusConnection build() throws IOException {
             return builder.build(buildTransportLayer());
         }
-
     }
 
     class Builder {
@@ -144,18 +142,18 @@ public interface WMBusConnection extends AutoCloseable {
         WMBusConnection build(TransportLayer transportLayer) throws IOException {
             AbstractWMBusConnection wmBusConnection;
             switch (this.wmBusManufacturer) {
-            case AMBER:
-                wmBusConnection = new WMBusConnectionAmber(this.mode, this.listener, transportLayer);
-                break;
-            case IMST:
-                wmBusConnection = new WMBusConnectionImst(this.mode, this.listener, transportLayer);
-                break;
-            case RADIO_CRAFTS:
-                wmBusConnection = new WMBusConnectionRadioCrafts(this.mode, this.listener, transportLayer);
-                break;
-            default:
-                // should not occur.
-                throw new RuntimeException("Unknown Manufacturer.");
+                case AMBER:
+                    wmBusConnection = new WMBusConnectionAmber(this.mode, this.listener, transportLayer);
+                    break;
+                case IMST:
+                    wmBusConnection = new WMBusConnectionImst(this.mode, this.listener, transportLayer);
+                    break;
+                case RADIO_CRAFTS:
+                    wmBusConnection = new WMBusConnectionRadioCrafts(this.mode, this.listener, transportLayer);
+                    break;
+                default:
+                    // should not occur.
+                    throw new RuntimeException("Unknown Manufacturer.");
             }
 
             wmBusConnection.open();

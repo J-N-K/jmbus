@@ -8,7 +8,6 @@ package org.openmuc.jmbus.wireless;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
-
 import org.junit.Test;
 import org.openmuc.jmbus.HexUtils;
 import org.openmuc.jmbus.SecondaryAddress;
@@ -32,19 +31,22 @@ public class ShortTelegramTest {
         wmBusDataMessage.getVariableDataResponse().decode();
 
         /* Could not decode because no long header was present */
-        assertEquals(0, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
+        assertEquals(
+                0, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
 
         wmBusDataMessage = WMBusMessage.decode(packetLong, 0, new HashMap<SecondaryAddress, byte[]>());
         wmBusDataMessage.getVariableDataResponse().decode();
 
         /* Can decode long header */
-        assertEquals(13, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
+        assertEquals(
+                13, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
 
         wmBusDataMessage = WMBusMessage.decode(packetShort, 0, new HashMap<SecondaryAddress, byte[]>());
         wmBusDataMessage.getVariableDataResponse().decode();
 
         /* Can short header now */
-        assertEquals(13, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
+        assertEquals(
+                13, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
     }
 
     @Test
@@ -58,19 +60,21 @@ public class ShortTelegramTest {
         WMBusMessage wmBusDataMessage = WMBusMessage.decode(packetShort, 0, new HashMap<SecondaryAddress, byte[]>());
         wmBusDataMessage.getVariableDataResponse().decode();
         /* Could not decode because no long header was present */
-        assertEquals(0, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
+        assertEquals(
+                0, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
 
         wmBusDataMessage = WMBusMessage.decode(packetLong, 0, new HashMap<SecondaryAddress, byte[]>());
         wmBusDataMessage.getVariableDataResponse().decode();
 
         /* Can decode long header */
-        assertEquals(8, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
+        assertEquals(
+                8, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
 
         wmBusDataMessage = WMBusMessage.decode(packetShort, 0, new HashMap<SecondaryAddress, byte[]>());
         wmBusDataMessage.getVariableDataResponse().decode();
 
         /* Can short header now */
-        assertEquals(8, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
+        assertEquals(
+                8, wmBusDataMessage.getVariableDataResponse().getDataRecords().size());
     }
-
 }

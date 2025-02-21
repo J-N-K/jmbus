@@ -13,7 +13,7 @@ public class BcdTest {
 
     @Test
     public void test1() {
-        Bcd bcd = new Bcd(new byte[] { 0x44, 0x44, 0x44, 0x44 });
+        Bcd bcd = new Bcd(new byte[] {0x44, 0x44, 0x44, 0x44});
 
         assertEquals(44444444, bcd.intValue());
         assertEquals(44444444l, bcd.longValue());
@@ -22,7 +22,7 @@ public class BcdTest {
 
     @Test
     public void Test2() {
-        Bcd bcd = new Bcd(new byte[] { 0x44, 0x44, 0x44, 0x04 });
+        Bcd bcd = new Bcd(new byte[] {0x44, 0x44, 0x44, 0x04});
 
         assertEquals(4444444, bcd.intValue());
         assertEquals(4444444l, bcd.longValue());
@@ -31,12 +31,10 @@ public class BcdTest {
 
     @Test
     public void test3() {
-        Bcd bcd = new Bcd(new byte[] { 0x44, 0x44, 0x44, (byte) 0xf4 });
+        Bcd bcd = new Bcd(new byte[] {0x44, 0x44, 0x44, (byte) 0xf4});
 
         assertEquals(-4444444, bcd.intValue());
         assertEquals(-4444444l, bcd.longValue());
         assertEquals("-4444444", bcd.toString());
-
     }
-
 }

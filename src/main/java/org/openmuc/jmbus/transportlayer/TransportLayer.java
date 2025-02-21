@@ -16,10 +16,10 @@ public interface TransportLayer extends AutoCloseable {
 
     /**
      * Opens the transport layer. The layer needs to be opened before attempting to read a device.
-     * 
+     *
      * @throws IOException
      *             if an I/O error occurs while opening.
-     * 
+     *
      */
     void open() throws IOException;
 
@@ -31,28 +31,28 @@ public interface TransportLayer extends AutoCloseable {
 
     /**
      * Get the output stream of the layer.
-     * 
+     *
      * @return the output stream.
      */
     DataOutputStream getOutputStream();
 
     /**
      * Get the input stream of the layer.
-     * 
+     *
      * @return the input stream.
      */
     DataInputStream getInputStream();
 
     /**
      * Check if the layer is open.
-     * 
+     *
      * @return {@code true} if the layer is closed.
      */
     boolean isClosed();
 
     /**
      * Set the response timeout.
-     * 
+     *
      * @param timeout
      *            the timeout in MILLIS.
      * @throws IOException
@@ -62,9 +62,9 @@ public interface TransportLayer extends AutoCloseable {
 
     /**
      * Get the response timeout in MILLIS.
-     * 
+     *
      * @return the response timeout in MILLIS.
-     * 
+     *
      * @throws IOException
      *             if an I/O error occurs.
      */

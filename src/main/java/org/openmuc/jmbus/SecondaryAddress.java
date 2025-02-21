@@ -30,7 +30,7 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
 
     /**
      * Instantiate a new secondary address within a long header.
-     * 
+     *
      * @param buffer
      *            the byte buffer.
      * @param offset
@@ -43,7 +43,7 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
 
     /**
      * Instantiate a new secondary address within a wireless M-Bus link layer header.
-     * 
+     *
      * @param buffer
      *            the byte buffer.
      * @param offset
@@ -56,7 +56,7 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
 
     /**
      * Instantiate a new secondary address for a manufacturer ID.
-     * 
+     *
      * @param idNumber
      *            ID number.
      * @param manufactureId
@@ -69,8 +69,9 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
      * @throws NumberFormatException
      *             if the idNumber is not long enough.
      */
-    public static SecondaryAddress newFromManufactureId(byte[] idNumber, String manufactureId, byte version, byte media,
-            boolean longHeader) throws NumberFormatException {
+    public static SecondaryAddress newFromManufactureId(
+            byte[] idNumber, String manufactureId, byte version, byte media, boolean longHeader)
+            throws NumberFormatException {
         if (idNumber.length != ID_NUMBER_LENGTH) {
             throw new NumberFormatException("Wrong length of ID. Length must be " + ID_NUMBER_LENGTH + " byte.");
         }
@@ -80,8 +81,7 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
         ByteBuffer byteBuffer = ByteBuffer.allocate(idNumber.length + mfId.length + 1 + 1);
         if (longHeader) {
             byteBuffer.put(idNumber).put(mfId);
-        }
-        else {
+        } else {
             byteBuffer.put(mfId).put(idNumber);
         }
         byte[] buffer = byteBuffer.put(version).put(media).array();
@@ -91,7 +91,7 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
 
     /**
      * The {@link SecondaryAddress} as byte array.
-     * 
+     *
      * @return the byte array (octet string) representation.
      */
     public byte[] asByteArray() {
@@ -100,7 +100,7 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
 
     /**
      * Get the manufacturer ID.
-     * 
+     *
      * @return the ID.
      */
     public String getManufacturerId() {
@@ -109,7 +109,7 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
 
     /**
      * Returns the device ID. This is secondary address of the device.
-     * 
+     *
      * @return the device ID
      */
     public Bcd getDeviceId() {
@@ -118,7 +118,7 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
 
     /**
      * Returns the device type (e.g. gas, water etc.)
-     * 
+     *
      * @return the device type
      */
     public DeviceType getDeviceType() {
@@ -127,7 +127,7 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
 
     /**
      * Get the version.
-     * 
+     *
      * @return the version.
      */
     public int getVersion() {
@@ -140,7 +140,8 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
 
     @Override
     public String toString() {
-        return new StringBuilder().append("manufacturer ID: ")
+        return new StringBuilder()
+                .append("manufacturer ID: ")
                 .append(manufacturerId)
                 .append(", device ID: ")
                 .append(deviceId)
@@ -184,8 +185,7 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
             if (longHeader) {
                 this.deviceId = decodeDeviceId(is);
                 this.manufacturerId = decodeManufacturerId(is);
-            }
-            else {
+            } else {
                 this.manufacturerId = decodeManufacturerId(is);
                 this.deviceId = decodeDeviceId(is);
             }
@@ -210,7 +210,7 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
 
     private static byte[] encodeManufacturerId(String manufactureId) {
         if (manufactureId.length() != 3) {
-            return new byte[] { 0, 0 };
+            return new byte[] {0, 0};
         }
 
         manufactureId = manufactureId.toUpperCase();
@@ -236,5 +236,4 @@ public class SecondaryAddress implements Comparable<SecondaryAddress> {
         }
         return new Bcd(idArray);
     }
-
 }

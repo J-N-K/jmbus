@@ -7,7 +7,7 @@ package org.openmuc.jmbus;
 
 /**
  * This class represents a verbose message. This may be useful to debug a connection.
- * 
+ *
  * @see VerboseMessageListener
  */
 public class VerboseMessage {
@@ -22,7 +22,7 @@ public class VerboseMessage {
 
     /**
      * Get the message data.
-     * 
+     *
      * @return an octet string.
      */
     public byte[] getMessage() {
@@ -31,7 +31,7 @@ public class VerboseMessage {
 
     /**
      * Get the direction of the message.
-     * 
+     *
      * @return the message direction.
      */
     public MessageDirection getMessageDirection() {
@@ -45,5 +45,4 @@ public class VerboseMessage {
         SEND,
         RECEIVE;
     }
-
 }

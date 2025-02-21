@@ -116,7 +116,7 @@ public enum DlmsUnit {
 
     /**
      * Returns the ID of this DlmsUnit.
-     * 
+     *
      * @return the ID
      */
     public int getId() {
@@ -125,7 +125,7 @@ public enum DlmsUnit {
 
     /**
      * Returns the unit sign of this DlmsUnit.
-     * 
+     *
      * @return the ID
      */
     public String getUnit() {
@@ -135,7 +135,7 @@ public enum DlmsUnit {
     /**
      * Returns the DlmsUnit that corresponds to the given ID. Returns DlmsUnit.RESERVED if no DlmsUnit with the given ID
      * exists.
-     * 
+     *
      * @param id
      *            the ID
      * @return the DlmsUnit that corresponds to the given ID
@@ -147,5 +147,4 @@ public enum DlmsUnit {
         }
         return enumInstance;
     }
-
 }

@@ -3,7 +3,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
 package org.openmuc.jmbus;
 
 import java.util.HashMap;
@@ -97,7 +96,7 @@ public enum DeviceType {
 
     /**
      * Returns the ID of this DeviceType.
-     * 
+     *
      * @return the ID
      */
     public int getId() {
@@ -107,7 +106,7 @@ public enum DeviceType {
     /**
      * Returns the DeviceType that corresponds to the given ID. Returns DeviceType.RESERVED if no DeviceType with the
      * given ID exists.
-     * 
+     *
      * @param id
      *            the ID
      * @return the DeviceType that corresponds to the given ID

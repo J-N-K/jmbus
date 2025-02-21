@@ -12,7 +12,6 @@ import java.nio.ByteOrder;
 import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.openmuc.jmbus.MBusMessage.MessageType;
 
 class ScanSecondaryAddress {
@@ -21,8 +20,12 @@ class ScanSecondaryAddress {
     private static int pos = 0;
     private static byte[] value = new byte[MAX_LENGTH];
 
-    public static List<SecondaryAddress> scan(MBusConnection mBusConnection, String wildcardMask,
-            SecondaryAddressListener secondaryAddressListener, long waitTime) throws IOException {
+    public static List<SecondaryAddress> scan(
+            MBusConnection mBusConnection,
+            String wildcardMask,
+            SecondaryAddressListener secondaryAddressListener,
+            long waitTime)
+            throws IOException {
 
         List<SecondaryAddress> secondaryAddresses = new LinkedList<>();
 
@@ -67,13 +70,11 @@ class ScanSecondaryAddress {
                     if (pos < 7) {
                         ++pos;
                         value[pos] = 0;
-                    }
-                    else {
+                    } else {
                         stop = handler();
                     }
                     collision = false;
-                }
-                else {
+                } else {
                     if (readSecondaryAddress != null) {
                         String message = "Detected Device:\n" + readSecondaryAddress.toString();
                         notifyScanMsg(secondaryAddressListener, message);
@@ -82,23 +83,20 @@ class ScanSecondaryAddress {
                             secondaryAddressListener.newDeviceFound(readSecondaryAddress);
                         }
                         stop = handler();
-                    }
-                    else {
+                    } else {
 
-                        notifyScanMsg(secondaryAddressListener,
-                                "Problem to decode secondary address. Perhaps a collision.");
+                        notifyScanMsg(
+                                secondaryAddressListener, "Problem to decode secondary address. Perhaps a collision.");
                         if (pos < 7) {
                             ++pos;
                             value[pos] = 0;
-                        }
-                        else {
+                        } else {
                             stop = handler();
                         }
                         collision = false;
                     }
                 }
-            }
-            else {
+            } else {
                 stop = handler();
             }
         }
@@ -110,10 +108,10 @@ class ScanSecondaryAddress {
 
     /**
      * Scans if any device response to the given wildcard.
-     * 
+     *
      * @param mBusConnection
      *            object to the open mbus connection
-     * 
+     *
      * @param wildcard
      *            secondary address wildcard e.g. f1ffffffffffffff
      * @return true if any device response else false
@@ -156,8 +154,7 @@ class ScanSecondaryAddress {
 
         if (value[pos] < 10) {
             stop = false;
-        }
-        else {
+        } else {
             if (pos > 0) {
                 --pos;
                 ++value[pos];
@@ -169,8 +166,7 @@ class ScanSecondaryAddress {
                     setFValue();
                 }
                 stop = false;
-            }
-            else {
+            } else {
                 stop = true;
             }
         }
@@ -191,8 +187,7 @@ class ScanSecondaryAddress {
 
             if (i % 2 > 0) {
                 sendByteArray[i / 2] |= value[i] << 4;
-            }
-            else {
+            } else {
                 sendByteArray[i / 2] |= value[i];
             }
         }
@@ -202,7 +197,7 @@ class ScanSecondaryAddress {
     /**
      * Flips character pairs. <br>
      * from 01253fffffffffff to 1052f3ffffffffff
-     * 
+     *
      * @param value
      *            a string value like 01253fffffffffff
      * @return a fliped string value.
@@ -220,8 +215,7 @@ class ScanSecondaryAddress {
     /**
      * Don't let anyone instantiate this class.
      */
-    private ScanSecondaryAddress() {
-    }
+    private ScanSecondaryAddress() {}
 
     private static void sleep(long millis) throws IOException {
         if (millis > 0) {
@@ -232,5 +226,4 @@ class ScanSecondaryAddress {
             }
         }
     }
-
 }

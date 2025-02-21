@@ -8,10 +8,10 @@ package org.openmuc.jmbus;
 import java.io.IOException;
 
 /**
- * 
+ *
  * Represents a wired M-Bus link layer message according to EN 13757-2. The messages are in format class FT 1.2
  * according to IEC 60870-5-2.
- * 
+ *
  * If the M-Bus message is of frame type Long Frame it contains user data and it contains the following fields:
  * <ul>
  * <li>Length (1 byte) -</li>
@@ -65,19 +65,20 @@ public class MBusMessage {
         VariableDataStructure variableDataStructure;
 
         switch (messageType) {
-        case SINGLE_CHARACTER:
-            addressField = 0;
-            variableDataStructure = null;
-            break;
-        case RSP_UD:
-            int messageLength = getLongFrameMessageLength(buffer, length);
-            checkLongFrameFields(buffer);
-            addressField = buffer[5] & 0xff;
-            variableDataStructure = new VariableDataStructure(buffer, RSP_UD_HEADER_LENGTH, messageLength, null, null);
-            break;
-        default:
-            // should not occur.
-            throw new RuntimeException("Case not supported " + messageType);
+            case SINGLE_CHARACTER:
+                addressField = 0;
+                variableDataStructure = null;
+                break;
+            case RSP_UD:
+                int messageLength = getLongFrameMessageLength(buffer, length);
+                checkLongFrameFields(buffer);
+                addressField = buffer[5] & 0xff;
+                variableDataStructure =
+                        new VariableDataStructure(buffer, RSP_UD_HEADER_LENGTH, messageLength, null, null);
+                break;
+            default:
+                // should not occur.
+                throw new RuntimeException("Case not supported " + messageType);
         }
 
         return new MBusMessage(messageType, addressField, variableDataStructure);
@@ -123,7 +124,8 @@ public class MBusMessage {
 
     @Override
     public String toString() {
-        return new StringBuilder().append("message type: ")
+        return new StringBuilder()
+                .append("message type: ")
                 .append(messageType)
                 .append("\naddress field: ")
                 .append(addressField & 0xff)
@@ -131,5 +133,4 @@ public class MBusMessage {
                 .append(variableDataStructure)
                 .toString();
     }
-
 }

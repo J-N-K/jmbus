@@ -74,7 +74,7 @@ public enum EncryptionMode {
 
     /**
      * Returns the ID of this EncryptionMode.
-     * 
+     *
      * @return the ID
      */
     public int getId() {
@@ -84,7 +84,7 @@ public enum EncryptionMode {
     /**
      * Returns the EncryptionMode that corresponds to the given ID. Throws an IllegalArgumentException if no
      * EncryptionMode with the given ID exists.
-     * 
+     *
      * @param id
      *            the ID
      * @return the EncryptionMode that corresponds to the given ID
@@ -96,5 +96,4 @@ public enum EncryptionMode {
         }
         return enumInstance;
     }
-
 }

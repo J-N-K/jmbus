@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import org.openmuc.jmbus.SecondaryAddress;
 import org.openmuc.jmbus.transportlayer.TransportLayer;
 
@@ -129,5 +128,4 @@ abstract class AbstractWMBusConnection implements WMBusConnection {
             throw new IOException(String.format("Did not receive ACK. Received 0x%02X instead.", b));
         }
     }
-
 }

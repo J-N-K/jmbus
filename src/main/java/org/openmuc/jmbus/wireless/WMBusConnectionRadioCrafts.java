@@ -10,13 +10,12 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.text.MessageFormat;
 import java.util.Arrays;
-
 import org.openmuc.jmbus.DecodingException;
 import org.openmuc.jmbus.transportlayer.TransportLayer;
 
 /*
  * Radio Craft W-MBUS frame:
- * 
+ *
  * @formatter:off
  * +---+----+-----------+
  * | L | CI | APPL_DATA |
@@ -33,6 +32,7 @@ class WMBusConnectionRadioCrafts extends AbstractWMBusConnection {
          * Indicates message from primary station, function send/no reply (SND -N
          */
         private static final byte CONTROL_BYTE = 0x44;
+
         private final TransportLayer transportLayer;
 
         private final byte[] discardBuffer = new byte[BUFFER_LENGTH];
@@ -53,7 +53,6 @@ class WMBusConnectionRadioCrafts extends AbstractWMBusConnection {
 
                     int len = messageData.length - 2;
                     handleData(messageData, len);
-
                 }
             } catch (final IOException e) {
                 if (!isClosed()) {
@@ -64,7 +63,6 @@ class WMBusConnectionRadioCrafts extends AbstractWMBusConnection {
                 close();
                 super.shutdown();
             }
-
         }
 
         private void handleData(byte[] messageData, int len) throws IOException {
@@ -73,8 +71,7 @@ class WMBusConnectionRadioCrafts extends AbstractWMBusConnection {
 
                 if (len == numReadBytes) {
                     notifyListener(messageData);
-                }
-                else {
+                } else {
                     discard(messageData, 0, numReadBytes + 2);
                 }
             } catch (InterruptedIOException e) {
@@ -107,7 +104,6 @@ class WMBusConnectionRadioCrafts extends AbstractWMBusConnection {
                     discard(discardBuffer, 0, bufferPointer);
                     bufferPointer = 0;
                 }
-
             }
 
             int messageLength = b0 & 0xff;
@@ -136,7 +132,6 @@ class WMBusConnectionRadioCrafts extends AbstractWMBusConnection {
 
             super.notifyDiscarded(discardedBytes);
         }
-
     }
 
     public WMBusConnectionRadioCrafts(WMBusMode mode, WMBusListener listener, TransportLayer tl) {
@@ -176,18 +171,18 @@ class WMBusConnectionRadioCrafts extends AbstractWMBusConnection {
         int modeFlag;
 
         switch (mode) {
-        case C:
-            modeFlag = 0x04;
-            break;
-        case S:
-            modeFlag = 0x00;
-            break;
-        case T:
-            modeFlag = 0x02;
-            break;
-        default:
-            String msg = MessageFormat.format("wMBUS Mode ''{0}'' is not supported", mode.toString());
-            throw new IOException(msg);
+            case C:
+                modeFlag = 0x04;
+                break;
+            case S:
+                modeFlag = 0x00;
+                break;
+            case T:
+                modeFlag = 0x02;
+                break;
+            default:
+                String msg = MessageFormat.format("wMBUS Mode ''{0}'' is not supported", mode.toString());
+                throw new IOException(msg);
         }
         return modeFlag;
     }
@@ -228,7 +223,5 @@ class WMBusConnectionRadioCrafts extends AbstractWMBusConnection {
         os.flush();
 
         waitForAck();
-
     }
-
 }

@@ -10,7 +10,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
 import org.junit.Test;
 import org.openmuc.jmbus.DataRecord;
 import org.openmuc.jmbus.HexUtils;
@@ -27,12 +26,12 @@ public class BCDNegativeTempTest {
         WMBusMessage wmBusDataMessage = WMBusMessage.decode(message, 0, keyMap);
         wmBusDataMessage.getVariableDataResponse().decode();
 
-        List<DataRecord> dataRecords = wmBusDataMessage.getVariableDataResponse().getDataRecords();
+        List<DataRecord> dataRecords =
+                wmBusDataMessage.getVariableDataResponse().getDataRecords();
         int size = dataRecords.size();
 
         Double lastValue = dataRecords.get(size - 1).getScaledDataValue();
 
         assertEquals(-4.1, lastValue, 0.1);
     }
-
 }
